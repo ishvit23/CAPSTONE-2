@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "question": "I'm feeling overwhelmed",
+    "answer": "When feeling overwhelmed, try breaking tasks into smaller steps, take deep breaths, and prioritize what's most important. It's okay to ask for help and take breaks. Remember, you don't have to do everything at once."
+  },
+  {
+    "id": 2,
+    "question": "I'm having trouble sleeping",
+    "answer": "Good sleep hygiene can help: establish a regular sleep schedule, create a relaxing bedtime routine, avoid screens before bed, and make your bedroom comfortable. If sleep problems persist, consider speaking with a healthcare provider."
+  },
+  {
+    "id": 3,
+    "question": "I feel anxious all the time",
+    "answer": "Try grounding techniques like the 5-4-3-2-1 method (identify 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste). Deep breathing, regular exercise, and limiting caffeine can also help. If anxiety is severe, professional support may be beneficial."
+  },
+  {
+    "id": 4,
+    "question": "I'm feeling sad and don't know why",
+    "answer": "It's normal to have periods of sadness. Try engaging in activities you enjoy, connecting with supportive people, getting some fresh air, or practicing self-compassion. If sadness persists for weeks or affects daily life, consider reaching out to a mental health professional."
+  },
+  {
+    "id": 5,
+    "question": "I'm having trouble concentrating",
+    "answer": "Difficulty concentrating can be caused by stress, lack of sleep, or other factors. Try minimizing distractions, breaking tasks into smaller chunks, taking regular breaks, and ensuring you're getting enough rest. If this persists, it may be worth discussing with a healthcare provider."
+  }
+]
