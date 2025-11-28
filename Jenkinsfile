@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = "your-registry/digibuddy-backend"
-        DOCKER_IMAGE_FRONTEND = "your-registry/digibuddy-frontend"
+        DOCKER_IMAGE_BACKEND = "docker.io/ishvit23/digibuddy-backend"
+        DOCKER_IMAGE_FRONTEND = "docker.io/ishvit23/digibuddy-frontend"
         K8S_MANIFEST_DIR = "k8s"
     }
 
