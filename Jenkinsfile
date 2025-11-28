@@ -43,8 +43,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh """
+                set -e
                 kubectl apply -f ${K8S_MANIFEST_DIR}/namespace.yaml || true
-                kubectl apply -f ${K8S_MANIFEST_DIR}/secret.yaml
+                if [ -f ${K8S_MANIFEST_DIR}/secret.yaml ]; then
+                  kubectl apply -f ${K8S_MANIFEST_DIR}/secret.yaml
+                else
+                  echo "Skipping ${K8S_MANIFEST_DIR}/secret.yaml (file not committed)"
+                fi
                 kubectl apply -f ${K8S_MANIFEST_DIR}/configmap.yaml
                 kubectl apply -f ${K8S_MANIFEST_DIR}/mongodb-deployment.yaml
                 kubectl apply -f ${K8S_MANIFEST_DIR}/backend-deployment.yaml
