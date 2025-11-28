@@ -31,6 +31,7 @@ pipeline {
         stage('UI Tests') {
             steps {
                 sh '''
+                #!/bin/bash
                 set -euo pipefail
 
                 kubectl port-forward -n digibuddy svc/frontend-service 30080:80 >/tmp/pf.log 2>&1 &
@@ -39,7 +40,7 @@ pipeline {
 
                 rm -rf selenium-venv
                 python3 -m venv selenium-venv
-                . selenium-venv/bin/activate
+                source selenium-venv/bin/activate
                 pip install --upgrade pip
                 pip install -r tests/selen/requirements.txt
                 pytest tests/selen -v --junitxml=tests/selen/report.xml
