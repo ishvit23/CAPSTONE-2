@@ -31,18 +31,24 @@ pipeline {
         stage('UI Tests') {
             steps {
                 sh '''
-                set -e
+                set -euo pipefail
+
                 kubectl port-forward -n digibuddy svc/frontend-service 30080:80 >/tmp/pf.log 2>&1 &
-                echo $! > pf.pid
-                python3 -m pip install --upgrade pip
+                PF_PID=$!
+                trap "kill $PF_PID || true" EXIT
+
+                rm -rf selenium-venv
+                python3 -m venv selenium-venv
+                . selenium-venv/bin/activate
+                pip install --upgrade pip
                 pip install -r tests/selen/requirements.txt
                 pytest tests/selen -v --junitxml=tests/selen/report.xml
+                deactivate
                 '''
             }
             post {
                 always {
-                    sh 'kill $(cat pf.pid) || true'
-                    junit 'tests/selen/report.xml'
+                    junit allowEmptyResults: true, testResults: 'tests/selen/report.xml'
                 }
             }
         }
