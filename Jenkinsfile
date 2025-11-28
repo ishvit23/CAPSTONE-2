@@ -28,6 +28,25 @@ pipeline {
             }
         }
 
+        stage('UI Tests') {
+            steps {
+                sh '''
+                set -e
+                kubectl port-forward -n digibuddy svc/frontend-service 30080:80 >/tmp/pf.log 2>&1 &
+                echo $! > pf.pid
+                python3 -m pip install --upgrade pip
+                pip install -r tests/selen/requirements.txt
+                pytest tests/selen -v --junitxml=tests/selen/report.xml
+                '''
+            }
+            post {
+                always {
+                    sh 'kill $(cat pf.pid) || true'
+                    junit 'tests/selen/report.xml'
+                }
+            }
+        }
+
         stage('Push Images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
