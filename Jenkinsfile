@@ -31,7 +31,7 @@ pipeline {
         stage('UI Tests') {
             steps {
                 sh '''
-                #!/bin/bash
+                /bin/bash -c '
                 set -euo pipefail
 
                 kubectl port-forward -n digibuddy svc/frontend-service 30080:80 >/tmp/pf.log 2>&1 &
@@ -45,6 +45,7 @@ pipeline {
                 pip install -r tests/selen/requirements.txt
                 pytest tests/selen -v --junitxml=tests/selen/report.xml
                 deactivate
+                '
                 '''
             }
             post {
