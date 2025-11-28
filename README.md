@@ -78,10 +78,24 @@ source env/bin/activate  # On Windows: env\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3. Create .env file:
+3. Create your environment file by copying the template:
+```bash
+cd Backend_new
+cp env.example .env  # Windows: copy env.example .env
+```
+Then edit `.env` and add your Gemini key:
 ```
 GEMINI_API_KEY=your_api_key_here
 ```
+
+4. Add Google OAuth credentials (required for login):
+```
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/api/auth/google/callback/
+FRONTEND_APP_URL=http://localhost:5173
+```
+Create the OAuth Client ID in Google Cloud Console (Web application) and add `http://localhost:8000/api/auth/google/callback/` as an authorized redirect URI.
 
 4. Run migrations:
 ```bash
@@ -95,15 +109,31 @@ python manage.py runserver
 
 ### Frontend Setup
 
-1. Install dependencies:
+1. Create your frontend environment file:
+```bash
+cp env.example .env  # Windows: copy env.example .env
+```
+Update `VITE_API_BASE_URL` if your backend does not run on `http://localhost:8000/api`.
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Start development server:
+3. Start development server:
 ```bash
 npm run dev
 ```
+
+### Google OAuth Flow
+
+1. From the frontend, visit `/login` and click **Continue with Google**.
+2. The backend endpoint `/api/auth/google/login/` generates a secure Google OAuth URL and returns it to the browser.
+3. After consenting at Google, the backend callback exchanges the code for Google tokens, creates/updates the user, and issues JWT access/refresh tokens via SimpleJWT.
+4. The backend redirects back to the frontend `/auth/callback` route, which stores the tokens and loads the user profile.
+5. Authenticated routes (like `/chat`) require a valid bearer token; the chatbot now includes a Logout button to clear tokens.
+
+If you change ports or deploy, update `FRONTEND_APP_URL`, `GOOGLE_REDIRECT_URI`, and `VITE_API_BASE_URL` accordingly.
 
 ## RAG Implementation
 

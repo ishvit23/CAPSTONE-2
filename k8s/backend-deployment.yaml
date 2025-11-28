@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: digibuddy
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: digibuddy-backend:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: digibuddy-secrets
+              key: GEMINI_API_KEY
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: digibuddy-secrets
+              key: GOOGLE_CLIENT_ID
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: digibuddy-secrets
+              key: GOOGLE_CLIENT_SECRET
+        - name: GOOGLE_REDIRECT_URI
+          valueFrom:
+            secretKeyRef:
+              name: digibuddy-secrets
+              key: GOOGLE_REDIRECT_URI
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: digibuddy-secrets
+              key: SECRET_KEY
+        - name: FRONTEND_APP_URL
+          valueFrom:
+            configMapKeyRef:
+              name: digibuddy-config
+              key: FRONTEND_APP_URL
+        - name: MONGODB_URI
+          valueFrom:
+            configMapKeyRef:
+              name: digibuddy-config
+              key: MONGODB_URI
+        - name: MONGODB_DB
+          valueFrom:
+            configMapKeyRef:
+              name: digibuddy-config
+              key: MONGODB_DB
+        - name: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: digibuddy-config
+              key: DEBUG
+        - name: ALLOWED_HOSTS
+          valueFrom:
+            configMapKeyRef:
+              name: digibuddy-config
+              key: ALLOWED_HOSTS
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 40
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          timeoutSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: digibuddy
+  labels:
+    app: backend
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+    nodePort: 30081
+  selector:
+    app: backend
+

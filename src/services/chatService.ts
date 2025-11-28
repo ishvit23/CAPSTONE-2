@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+import { API_BASE_URL } from "@/config";
+
+const ACCESS_TOKEN_KEY = "accessToken";
 
 export interface ChatMessage {
   id: number;
@@ -18,10 +20,12 @@ export interface ChatResponse {
 export const chatService = {
   async sendMessage(message: string, chatHistory: ChatMessage[] = []): Promise<ChatResponse> {
     try {
+      const token = localStorage.getItem(ACCESS_TOKEN_KEY);
       const response = await fetch(`${API_BASE_URL}/chat/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           message,

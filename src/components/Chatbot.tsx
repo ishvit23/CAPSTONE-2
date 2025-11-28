@@ -6,10 +6,13 @@ import ChatInput from "./ChatInput";
 import SuggestionButtons from "./SuggestionButtons";
 import { chatService, type ChatMessage } from "@/services/chatService";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { LogOut } from "lucide-react";
 
 const Chatbot = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, logout } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
@@ -115,6 +118,20 @@ const Chatbot = () => {
               🤖
             </div>
             <h1 className="text-2xl font-bold text-gray-800">Mental Health Support Chat</h1>
+          </div>
+          <div className="ml-auto flex items-center gap-3">
+            <span className="text-sm text-gray-500 hidden md:block">
+              {user ? `Signed in as ${user.first_name || user.username}` : ""}
+            </span>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={logout}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+            >
+              <LogOut size={16} />
+              <span className="text-sm font-semibold">Logout</span>
+            </motion.button>
           </div>
         </div>
       </motion.div>

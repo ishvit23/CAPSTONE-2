@@ -22,3 +22,7 @@ Backend_new/fine_tuned_model/
 
 # Knowledge Base
 Backend_new/knowledge_base/*.json
+
+# Kubernetes secrets (never commit!)
+k8s/secret.yaml
+*.secret.yaml

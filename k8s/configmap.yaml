@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: digibuddy-config
+  namespace: digibuddy
+data:
+  # Frontend URL (adjust based on your ingress/service)
+  FRONTEND_APP_URL: "http://localhost:30080"
+  # MongoDB connection (adjust if using external MongoDB)
+  MONGODB_URI: "mongodb://mongodb-service:27017"
+  MONGODB_DB: "digibuddy"
+  # Django settings
+  DJANGO_SETTINGS_MODULE: "digibuddy.settings"
+  DEBUG: "False"
+  ALLOWED_HOSTS: "*"
+
